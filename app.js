@@ -14,6 +14,7 @@ app.engine('hbs', engine({ defaultLayout: 'main', extname: 'hbs' }))
 app.set('view engine', 'hbs')//使用時省略寫副檔名
 app.set('views', './views')//使用時省略./views
 app.use(methodOverride('_method'));//RESTful API for PUT and DELET
+app.use(express.static('public'))
 
 app.get('/', (req, res) => {
   res.render('index')
