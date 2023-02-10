@@ -1,39 +1,44 @@
+{{> navBar logout='logout'}}
 <div class='card mx-auto' style='width: 25rem; border:none; margin-top:5%'>
   <h1 class=' mx-auto'>修改帳目</h1>
   {{!-- {{> message}} --}}
   <div class='card-body'>
-    <form action="/:id/edit" method="POST">
+    <form action="/{{expense._id}}/edit?_method=PUT" method="POST">
       <div class="mb-3 d-flex checktype">
-          <label class="btn btn-outline-primary flex-fill" for="costCheck" >
-            <input class="btn-check" type="checkbox"  id="costCheck" autocomplete="off">
-            支出</label>
-          <label class="btn btn-outline-success flex-fill" for="incomeCheck">
-            <input class="btn-check " type="checkbox" id="incomeCheck" autocomplete="off">
-            收入</label>
+        <input class="btn-check" type="checkbox" name="type" id="costCheck" value="支" {{#ifCond expense.type "支"
+          }}checked{{/ifCond}}>
+        <label class="btn btn-outline-primary flex-fill" for="costCheck">支出</label>
+        <input class="btn-check " type="checkbox" name="type" id="incomeCheck" value="收" {{#ifCond expense.type "收"
+          }}checked{{/ifCond}}>
+        <label class="btn btn-outline-primary flex-fill" for="incomeCheck">收入</label>
       </div>
       <div class="mb-3 d-flex">
         <label for="name" class="input-group-text">名稱*</label>
-        <input type="text" id="name" name="name" class="form-control "  value="{{name}}">
+        <input type="text" id="name" name="name" class="form-control " value="{{expense.name}}">
       </div>
       <div class='mb-3 d-flex'>
         <label for='date' class='input-group-text'>日期*</label>
-        <input type='date' name='date' class='form-control' id='date' value="{{date}}" />
+        <input type='date' name='date' class='form-control' id='date' value="{{expense.date}}" />
       </div>
       <div class='mb-3 d-flex'>
         <label for='category' class='input-group-text'>類別*</label>
         <select name="category" class="form-select" id="category">
-          <option selected>Choose...</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
+          {{!-- <option value="">Choose...</option> --}}
+          <option value="household" {{#ifCond expense.category 'home' }}selected{{/ifCond}}>家居物業</option>
+          <option value="commute" {{#ifCond expense.category 'shuttleVan' }}selected{{/ifCond}}>交通出行</option>
+          <option value="entertainment" {{#ifCond expense.category 'grinBeam' }}selected{{/ifCond}}>休閒娛樂</option>
+          <option value="catering" {{#ifCond expense.category 'utensils' }}selected{{/ifCond}}>餐飲食品</option>
+          <option value="other" {{#ifCond expense.category 'other' }}selected{{/ifCond}}>其他</option>
         </select>
       </div>
       <div class="mb-3 d-flex">
         <label for="cost" class="input-group-text">金額*</label>
-        <input type="number" id="cost" name="cost" class="form-control " value="{{cost}}">
+        <input type="number" id="cost" name="cost" class="form-control" min="1" value="{{expense.cost}}">
       </div>
       <div class='text-danger note'>{{note}}</div>
       <button type='submit' class='btn btn-info d-block mx-auto mt-3 ' style="width: 16rem;">送出修改</button>
+      <a class="btn btn-outline-secondary d-block mx-auto mt-3" style="width: 16rem"
+        href="javascript:history.back()">Back</a>
     </form>
   </div>
 </div>

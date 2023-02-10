@@ -1,0 +1,13 @@
+<header>
+  <nav class="navbar bg-body-tertiary bg-dark ">
+    <div class="container-fluid mx-5">
+      <a href="/" class="navbar-brand text-light">廣志の私帳</a>
+      <div>
+        {{#ifCond route 'register'}}<a href="/login" class="btn btn-outline-success">Login</a>{{/ifCond }}
+        {{#ifCond route 'login'}}<a href="/register" class="btn btn-outline-success">Register</a>{{/ifCond }}
+        {{#ifCond logout 'logout'}}<a href="/logout" class="btn btn-outline-success">logout</a>{{/ifCond }}
+        {{#ifCond route 'index'}}<a href="/new" class="btn btn-outline-success">new</a>{{/ifCond }}
+      </div>
+    </div>
+  </nav>
+</header>

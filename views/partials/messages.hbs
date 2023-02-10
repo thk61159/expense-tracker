@@ -1,0 +1,13 @@
+
+{{#if success_messages}}
+<div class="alert alert-success alert-dismissible fade show mx-auto" role="alert" style='width: 50%; border:none; margin-top:5%'>
+   {{ success_messages}}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
+{{#if error_messages}}
+<div class="alert alert-warning alert-dismissible fade show mx-auto" role="alert" style='width: 50%; border:none; margin-top:5%'>
+   {{ error_messages}}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}

@@ -9,6 +9,7 @@ const flash = require('connect-flash')
 require('./config/mongoose')
 const routes = require('./routes')
 const passport = require('./config/passport')
+const hbsHelpers = require('./helpers/hbsHelpers')
 
 if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config()
@@ -17,7 +18,7 @@ if (process.env.NODE_ENV !== 'production') {
 const app = express()
 const PORT = process.env.PORT || 3000
 app.use(express.urlencoded({ extended: true }))
-app.engine('hbs', engine({ defaultLayout: 'main', extname: 'hbs' }))
+app.engine('hbs', engine({ defaultLayout: 'main', extname: 'hbs', helpers: hbsHelpers }))
 app.set('view engine', 'hbs')//使用時省略寫副檔名
 app.set('views', './views')//使用時省略./views
 app.use(methodOverride('_method'));//RESTful API for PUT and DELET

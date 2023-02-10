@@ -1,72 +1,71 @@
+{{> navBar route ='index' logout='logout'}}
 <div class='card mx-auto' style='width: 80%; border:none; margin-top:5%'>
-  <form action="/" method="get">
+  <form action="/sorting" method="get">
     <div class='mb-3 d-flex mx-auto' style='width: 30%; border:none'>
-      <label for='sort' class='input-group-text'>排序</label>
-      <select name="method" class="form-select" id="method">
-        <option selected>正序</option>
-        <option value="1">倒序</option>
+      <label for='sortmethod' class='input-group-text'>排序</label>
+      <select name="sortmethod" class="form-select" id="sortmethod" onchange='this.form.submit()' >
+        <option value="" selected>Choose...</option>
+        <option value="1">正序</option>
+        <option value="-1">倒序</option>
       </select>
-      <select name="sort" class="form-select" id="sort">
-        <option selected>Choose...</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+      <select name="sort" class="form-select" id="sort" onchange='this.form.submit()'>
+        <option value="" selected>Choose...</option>
+        <option value="income">收入</option>
+        <option value="spending">支出</option>
+        <option value="category">類別</option>
+        <option value="name">名稱</option>
+        <option value="date">日期</option>
+        <option value="cost">金額</option>
       </select>
     </div>
     <div class='mb-3 d-flex mx-auto' style='width: 30%; border:none'>
-      <label for='category' class='input-group-text'>類別*</label>
-      <select name="category" class="form-select" id="category">
-        <option selected>Choose...</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+      <label for='categorySearch' class='input-group-text'>類別*</label>
+      <select name="categorySearch" class="form-select" id="categorySearch" onchange='this.form.submit()'>
+        <option value="" selected>Choose...</option>
+        <option value="household">家居物業</option>
+        <option value="commute">交通出行</option>
+        <option value="entertainment">休閒娛樂</option>
+        <option value="catering">餐飲食品</option>
+        <option value="other">其他</option>
       </select>
     </div>
   </form>
   <div class='mb-3 d-flex mx-auto' style='width: 30%; border:none' id="totalAmount">
     <ul class="list-group list-group-horizontal flex-fill ">
       <li class="list-group-item list-group-item-warning">總金額</li>
-      <li class="list-group-item flex-fill">9</li>
+      <li class="list-group-item flex-fill">{{totalSpending}}</li>
     </ul>
   </div>
   <div class="mx-auto">
-    <table class="table table-striped table-hover">
+    <table class="table table-hover">
       <thead>
         <tr>
-          <th scope="col">收/支</th>
-          <th scope="col">類別</th>
-          <th scope="col">名稱</th>
-          <th scope="col">日期</th>
-          <th scope="col">金額</th>
-          <th scope="col">編輯</th>
-          <th scope="col">刪除</th>
+          <th scope="col" class="text-center">收/支</th>
+          <th scope="col" class="text-center">類別</th>
+          <th scope="col" class="text-center">名稱</th>
+          <th scope="col" class="text-center">日期</th>
+          <th scope="col" class="text-center">金額</th>
+          <th scope="col" class="text-center">編輯</th>
+          <th scope="col" class="text-center">刪除</th>
         </tr>
       </thead>
       <tbody>
-
-        <tr>
-          <th scope="row">支</th>
-          <td>食</td>
-          <td>午餐</td>
-          <td>2022/02/07</td>
-          <td>$$$</td>
-          <td><i class="fa-solid fa-pen-to-square"></i></td>
-          <td><i class="fa-solid fa-trash"></i></td>
+        {{#each expenses}}
+        <tr class="{{#ifCond this.type '收'}}table-success{{/ifCond}} align-middle">
+          <td class="text-center">{{this.type}}</td>
+          <td class="text-center">{{this.category}}</td>
+          <td class="text-center">{{this.name}}</td>
+          <td class="text-center">{{this.date}}</td>
+          <td class="text-center">{{this.cost}}</td>
+          <td class="text-center"><a href="/{{this._id}}/edit"><i class="fa-solid fa-pen-to-square"></i></a></td>
+          <td class="text-center">
+            <form action="/{{ this._id }}?_method=DELETE" method="POST"><button style="background-color: transparent; outline:none; border:none"><i class="fa-solid fa-trash" ></i></button></form>
+          </td>
         </tr>
-
-        <tr>
-          <th scope="row">支</th>
-          <td>食</td>
-          <td>晚餐</td>
-          <td>2022/02/07</td>
-          <td>$$$</td>
-          <td><i class="fa-solid fa-pen-to-square"></i></td>
-          <td><i class="fa-solid fa-trash"></i></td>
-        </tr>
-        
+        {{/each}}
       </tbody>
     </table>
-    
+
   </div>
 
 </div>
