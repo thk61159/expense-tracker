@@ -5,8 +5,9 @@
       <div>
         {{#ifCond route 'register'}}<a href="/login" class="btn btn-outline-success">Login</a>{{/ifCond }}
         {{#ifCond route 'login'}}<a href="/register" class="btn btn-outline-success">Register</a>{{/ifCond }}
-        {{#ifCond logout 'logout'}}<a href="/logout" class="btn btn-outline-success">logout</a>{{/ifCond }}
         {{#ifCond route 'index'}}<a href="/new" class="btn btn-outline-success">new</a>{{/ifCond }}
+        {{#ifCond logout 'logout'}}<a href="/logout" class="btn btn-outline-success">logout</a>{{/ifCond }}
+        
       </div>
     </div>
   </nav>

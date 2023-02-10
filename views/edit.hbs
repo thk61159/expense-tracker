@@ -21,14 +21,15 @@
         <input type='date' name='date' class='form-control' id='date' value="{{expense.date}}" />
       </div>
       <div class='mb-3 d-flex'>
-        <label for='category' class='input-group-text'>類別*</label>
-        <select name="category" class="form-select" id="category">
+        <label for='categoryId' class='input-group-text'>類別*</label>
+        <select name="categoryId" class="form-select" id="categoryId">
           {{!-- <option value="">Choose...</option> --}}
-          <option value="household" {{#ifCond expense.category 'home' }}selected{{/ifCond}}>家居物業</option>
-          <option value="commute" {{#ifCond expense.category 'shuttleVan' }}selected{{/ifCond}}>交通出行</option>
-          <option value="entertainment" {{#ifCond expense.category 'grinBeam' }}selected{{/ifCond}}>休閒娛樂</option>
-          <option value="catering" {{#ifCond expense.category 'utensils' }}selected{{/ifCond}}>餐飲食品</option>
-          <option value="other" {{#ifCond expense.category 'other' }}selected{{/ifCond}}>其他</option>
+          {{#each categories}}
+          <option value="{{this._id}}" {{#ifCond this._id ../expense.categoryId}}selected{{/ifCond}}>{{this.name}}
+          </option> 
+          {{/each}}
+
+
         </select>
       </div>
       <div class="mb-3 d-flex">

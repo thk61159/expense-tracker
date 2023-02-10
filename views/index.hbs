@@ -22,17 +22,15 @@
       <label for='categorySearch' class='input-group-text'>類別*</label>
       <select name="categorySearch" class="form-select" id="categorySearch" onchange='this.form.submit()'>
         <option value="" selected>Choose...</option>
-        <option value="household">家居物業</option>
-        <option value="commute">交通出行</option>
-        <option value="entertainment">休閒娛樂</option>
-        <option value="catering">餐飲食品</option>
-        <option value="other">其他</option>
+        {{#each categories}}
+          <option value="{{this._id}}">{{this.name}}</option>
+          {{/each}}
       </select>
     </div>
   </form>
   <div class='mb-3 d-flex mx-auto' style='width: 30%; border:none' id="totalAmount">
     <ul class="list-group list-group-horizontal flex-fill ">
-      <li class="list-group-item list-group-item-warning">總金額</li>
+      <li class="list-group-item list-group-item-warning">總收支</li>
       <li class="list-group-item flex-fill">{{totalSpending}}</li>
     </ul>
   </div>
@@ -53,7 +51,7 @@
         {{#each expenses}}
         <tr class="{{#ifCond this.type '收'}}table-success{{/ifCond}} align-middle">
           <td class="text-center">{{this.type}}</td>
-          <td class="text-center">{{this.category}}</td>
+          <td class="text-center"><i class="{{this.category.img}}"></i></td>
           <td class="text-center">{{this.name}}</td>
           <td class="text-center">{{this.date}}</td>
           <td class="text-center">{{this.cost}}</td>
