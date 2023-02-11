@@ -39,7 +39,6 @@ const expenseController = {
 				return this[key] = value
 			}
 			let sort = new SORT(sortTitle, sortMethod)
-			console.log(sort)
 			const userId = req.user._id
 			const categories = await Category.find().lean()
 			const data =

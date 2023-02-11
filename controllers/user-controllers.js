@@ -22,6 +22,7 @@ const userController = {
 		try {
 			const { name, email, password, confirmPassword } = req.body
 			try {
+				//確認資料無誤
 				userController.checkRegisterInput(
 					name,
 					email,
@@ -29,11 +30,10 @@ const userController = {
 					confirmPassword
 				)
 			} catch (err) {
-				console.log(err)
+				res.render('register', { name, email })
 				return next(err)
 			}
 			const user = await User.find({ email })
-			console.log(user)
 			if (user.length > 0) throw new Error('此信箱已被註冊')
 			const salt = await bcrypt.genSalt(10)
 			const hash = await bcrypt.hash(password, salt)
@@ -44,7 +44,7 @@ const userController = {
 			})
 			res.redirect('/login')
 		} catch (err) {
-			next(err)
+			return next(err)
 		}
 	},
 	logout: (req, res) => {
