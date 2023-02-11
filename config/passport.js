@@ -9,10 +9,11 @@ passport.use(
 	new LocalStrategy(
 		{
 			usernameField: 'email',
-			passReqToCallback:true
+			passReqToCallback: true,
 		},
-		function (req, email, password, done) {
-			User.findOne({ email }).then(user => {
+		async (req, email, password, done) => {
+			try {
+				const user = await User.findOne({ email })
 				if (!user) {
 					return done(
 						null,
@@ -20,24 +21,18 @@ passport.use(
 						req.flash('warning_messages', '錯誤信箱或密碼！')
 					)
 				}
-
-				return bcrypt
-					.compare(password, user.password)
-					.then(isMatch => {
-						if (!isMatch) {
-							return done(
-								null,
-								false,
-								req.flash('warning_messages', '錯誤信箱或密碼！')
-							)
-						}
-						return done(
-							null,
-							user,
-						)
-					})
-					.catch(err => done(err, false))
-			})
+				const isMatch = await bcrypt.compare(password, user.password)
+				if (!isMatch) {
+					return done(
+						null,
+						false,
+						req.flash('warning_messages', '錯誤信箱或密碼！')
+					)
+				}
+				return done(null, user)
+			} catch (err) {
+				return done(err, false)
+			}
 		}
 	)
 )
@@ -49,26 +44,25 @@ passport.use(
 			callbackURL: process.env.FACEBOOK_CALLBACK,
 			profileFields: ['email', 'displayName'],
 		},
-		function (accessToken, refreshToken, profile, done) {
-			const { name, email } = profile._json
-			User.findOne({ email }).then(user => {
+		async (accessToken, refreshToken, profile, done) => {
+			try {
+				const { name, email } = profile._json
+				let user = await User.findOne({ email })
 				if (user) {
 					return done(null, user)
 				}
 				const randomPassword = Math.random().toString(36).slice(-8)
-				bcrypt
-					.genSalt(10)
-					.then(salt => bcrypt.hash(randomPassword, salt))
-					.then(hash =>
-						User.create({
-							name,
-							email,
-							password: hash,
-						})
-					)
-					.then(user => done(null, user))
-					.catch(e => done(e, false))
-			})
+				const salt = await bcrypt.genSalt(10)
+				const hash = await bcrypt.hash(randomPassword, salt)
+				user = await User.create({
+					name,
+					email,
+					password: hash,
+				})
+				return done(null, user)
+			} catch (err) {
+				return done(err, false)
+			}
 		}
 	)
 )
@@ -80,27 +74,28 @@ passport.use(
 			callbackURL: process.env.GOOGLE_CALLBACK,
 			scope: ['profile'],
 		},
-		function (accessToken, refreshToken, profile, done) {
-			const { name, email } = profile._json
-			User.findOne({ email }).then(user => {
+		async (accessToken, refreshToken, profile, done) => {
+			try {
+				const { name, email } = profile._json
+				let user = await User.findOne({ email })
 				if (user) {
 					return done(null, user)
 				}
 				const randomPassword = Math.random().toString(36).slice(-8)
-				bcrypt
-					.genSalt(10)
-					.then(salt => bcrypt.hash(randomPassword, salt))
-					.then(hash =>
-						User.create({
-							name,
-							email,
-							password: hash,
-						})
-					)
-					.then(user => done(null, user))
-					.catch(e => done(e, false))
-			})
+				const salt = await bcrypt.genSalt(10)
+				const hash = await bcrypt.hash(randomPassword, salt)
+				user = await User.create({
+					name,
+					email,
+					password: hash,
+				})
+				return	done(null, user)
+					
+			}catch (err) {
+				return done(err, false)
+			}
 		}
+		
 	)
 )
 passport.serializeUser((user, done) => {
