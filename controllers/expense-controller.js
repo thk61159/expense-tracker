@@ -1,10 +1,11 @@
+const mongoose = require('mongoose')
 const Expense = require('../models/expense')
 const Category = require('../models/category')
 const expenseController = {
 	spendingList: async (req, res, next) => {
 		try {
 			const userId = req.user._id
-			const data = await Expense.find({ userId }).lean()
+			const data = await Expense.find({ userId }).lean().sort({ date: -1 })
 			const categories = await Category.find().lean()
 			const expenses = data.map(expense => ({
 				...expense,
@@ -12,7 +13,6 @@ const expenseController = {
 					element => String(element._id) === String(expense.categoryId)
 				),
 			}))
-			console.log(data)
 			let totalSpending = 0
 			for (const element of expenses) {
 				if (element.type === '收') {
@@ -21,14 +21,56 @@ const expenseController = {
 					totalSpending -= element.cost
 				}
 			}
-			
 			res.render('index', { expenses, totalSpending, categories })
 		} catch (err) {
 			return next(err)
 		}
 	},
-	sortingList: (req, res, next) => {
-		res.send('it is going to sort data')
+	sortingList: async (req, res, next) => {
+		try {
+			const {
+				sortMethod,
+				sortTitle,
+				sortCategory,
+			} = req.query
+			//&& -> if the left hand side is true, then evaluates as the right hand side
+			const categoryId = sortCategory !== 'null' && mongoose.Types.ObjectId(sortCategory)
+			function SORT(key, value) {
+				return this[key] = value
+			}
+			let sort = new SORT(sortTitle, sortMethod)
+			console.log(sort)
+			const userId = req.user._id
+			const categories = await Category.find().lean()
+			const data =
+				sortCategory === 'null'
+					? await Expense.find({ userId }).lean().sort(sort)
+					: await Expense.find({ userId, categoryId }).lean().sort(sort)
+			const expenses = data.map(expense => ({
+				...expense,
+				category: categories.find(
+					element => String(element._id) === String(expense.categoryId)
+				),
+			}))
+			let totalSpending = 0
+			for (const element of expenses) {
+				if (element.type === '收') {
+					totalSpending += element.cost
+				} else {
+					totalSpending -= element.cost
+				}
+			}
+			res.render('index', {
+				expenses,
+				totalSpending,
+				categories,
+				sortMethod,
+				sortTitle,
+				sortCategory,
+			})
+		} catch (err) {
+			return next(err)
+		}
 	},
 	getNewExpense: async (req, res, next) => {
 		try {
@@ -40,7 +82,6 @@ const expenseController = {
 	},
 	getEditExpence: async (req, res, next) => {
 		try {
-			
 			const expenseId = req.params.id
 			const expense = await Expense.findById(expenseId).lean()
 			const categories = await Category.find().lean()
@@ -58,14 +99,14 @@ const expenseController = {
 			const userId = req.user._id
 			const { type, name, date, categoryId, cost } = req.body
 			try {
+				//確認資料無誤
 				expenseController.checkNewOrEditInput(
 					type,
 					name,
 					date,
 					categoryId,
-					cost,
+					cost
 				)
-				
 			} catch (err) {
 				return next(err)
 			}
@@ -88,6 +129,7 @@ const expenseController = {
 			const expenseId = req.params.id
 			const { type, name, date, categoryId, cost } = req.body
 			try {
+				//確認資料無誤
 				expenseController.checkNewOrEditInput(
 					type,
 					name,
@@ -119,7 +161,6 @@ const expenseController = {
 			return next(err)
 		}
 	},
-
 	checkNewOrEditInput: function (type, name, date, categoryId, cost) {
 		if (type.length !== 1 && (type !== '收' || type !== '支'))
 			throw new Error('不存在的收支方法')

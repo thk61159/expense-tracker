@@ -2,6 +2,7 @@
   <nav class="navbar bg-body-tertiary bg-dark ">
     <div class="container-fluid mx-5">
       <a href="/" class="navbar-brand text-light">廣志の私帳</a>
+      {{#if currentUser}}<span class="text-light fs-3">Hi~{{currentUser.name}}</span>{{/if}}
       <div>
         {{#ifCond route 'register'}}<a href="/login" class="btn btn-outline-success">Login</a>{{/ifCond }}
         {{#ifCond route 'login'}}<a href="/register" class="btn btn-outline-success">Register</a>{{/ifCond }}
