@@ -9,11 +9,16 @@ passport.use(
 	new LocalStrategy(
 		{
 			usernameField: 'email',
+			passReqToCallback:true
 		},
-		function (email, password, done) {
+		function (req, email, password, done) {
 			User.findOne({ email }).then(user => {
 				if (!user) {
-					return done(null, false, req.flash('warning_msg', '錯誤信箱或密碼！'))
+					return done(
+						null,
+						false,
+						req.flash('warning_messages', '錯誤信箱或密碼！')
+					)
 				}
 
 				return bcrypt
@@ -23,10 +28,13 @@ passport.use(
 							return done(
 								null,
 								false,
-								req.flash('warning_msg', '錯誤信箱或密碼！')
+								req.flash('warning_messages', '錯誤信箱或密碼！')
 							)
 						}
-						return done(null, user)
+						return done(
+							null,
+							user,
+						)
 					})
 					.catch(err => done(err, false))
 			})

@@ -30,6 +30,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use((req, res, next) => {
 	res.locals.success_messages = req.flash('success_messages') // 設定 success_msg 訊息
+	res.locals.warning_messages = req.flash('warning_messages')
 	res.locals.error_messages = req.flash('error_messages') // 設定 warning_msg 訊息
 	res.locals.currentUser = req.user
 	next()
