@@ -2,6 +2,8 @@
 利用node.js打造記帳網頁，瀏覽收支列表，計算總消費額，新增修改刪除收支項目，掌握帳務，成為理財大師！
 歡迎查看雲端部署專案
 https://frozen-crag-42286.herokuapp.com/register
+email: root@example.com
+password: 12345678
 
 ## 功能
 1. 查看所有收支列表
