@@ -13,17 +13,16 @@
         <label for='password' class='form-label'>Password</label>
         <input type='password' name='password' class='form-control' id='password' placeholder="Enter Password" />
       </div>
-      <div class='text-danger'>{{note}}</div>
+      
       
 
-      <button type='submit' class='btn btn-primary d-block mx-auto mt-3' style="width: 16rem;">Local Login</button>
-      <a href="/auth/facebook" class="btn btn-info btn-block mt-3 mx-auto d-block" style="width: 16rem;">Facebook Login</a>
-      <a href="/auth/google" class="btn btn-danger btn-block mt-3 mx-auto d-block" style="width: 16rem;">Google Login</a>
+      <button type='submit' class='btn btn-primary d-block mx-auto mt-2' style="width: 16rem;">Local Login</button>
+      <a href="/auth/facebook" class="btn btn-info btn-block mt-2 mx-auto d-block" style="width: 16rem;">Facebook Login</a>
+      <a href="/auth/google" class="btn btn-danger btn-block mt-2 mx-auto d-block" style="width: 16rem;">Google Login</a>
     </form>
     <p class="lead mt-4">
-        No Account? <a href="/register">Register</a>
+        {{!-- No Account? <a href="/register">Register</a> --}}
+        <a href="/forgotPassword" class="nav-link btn btn-outline-secondary">forgot password?</a>
     </p>
-    
-
   </div>
 </div>
