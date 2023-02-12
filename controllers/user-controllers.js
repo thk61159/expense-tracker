@@ -58,6 +58,9 @@ const userController = {
 	forgotPasswordPage: (req, res) => {
 		res.render('auth/forgotPassword')
 	},
+	confirmMailPage:(req, res) => {
+		res.render('auth/confirmMail')
+	},
 	passwordReset: async (req, res, next) => {
 		try {
 			const { email } = req.body
@@ -69,12 +72,17 @@ const userController = {
 				id: user._id,
 				email,
 			}
+			const resetInterval = Number(new Date()) - Number(user.updatedAt)
+			const waitingTime = (24*60*60*1000 - resetInterval) / 3600000
+			if (waitingTime > 0)
+				throw new Error(`重設密碼間隔過短，請${Math.floor(waitingTime)}小時後再嘗試`)
+			
 			const token = jwt.sign(payload, process.env.JWT_SECRET, {
 				expiresIn: 60 * 30,
 			})
 			const homeAddress = process.env.HOME_ADDRESS
-			// create reusable transporter object using the default SMTP transport
-			let transporter = nodemailer.createTransport({
+			
+			let transporter = await nodemailer.createTransport({
 				host: 'smtp.gmail.com',
 				port: 465,
 				secure: true, // true for 465, false for other ports
@@ -88,9 +96,9 @@ const userController = {
 				from: process.env.GOOGLE_SMTP_ADDRESS,
 				to: email,
 				subject: 'expense-tracker password reset ✔',
-				html: `<a href=${homeAddress}/resetPassword/${token}>Please reset password in 30 mins.</a>`, // html body
+				html: `<a href=${homeAddress}/resetPassword/${token}>Please reset password in 30 mins.</a>`
 			})
-			res.redirect('/login')
+			res.redirect('/comfirmMail')
 		} catch (err) {
 			return next(err)
 		}
@@ -116,12 +124,14 @@ const userController = {
 			}
 			const decoded = JSON.stringify(jwt.verify(token, process.env.JWT_SECRET))
 			console.log(decoded)
-			const payload =  JSON.parse(decoded)
+			const payload = JSON.parse(decoded)
 			console.log(payload)
 			const user = await User.findById(payload.id)
 			const salt = await bcrypt.genSalt(10)
 			const hash = await bcrypt.hash(password, salt)
 			user.password = hash
+			user.updatedAt = new Date()
+
 			await user.save()
 			res.redirect('/login')
 		} catch (err) {

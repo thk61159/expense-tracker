@@ -23,6 +23,7 @@ router.get('/forgotPassword', userController.forgotPasswordPage)
 router.post('/passwordReset', userController.passwordReset)
 router.get('/resetPassword/:token',resetLimit, userController.resetPasswordPage)
 router.post('/resetPassword/:token', userController.resetPassword)
+router.get('/confirmMail', userController.confirmMailPage)
 
 router.get('/', authenticator, expenseController.spendingList)
 router.use('/', generalErrorHandler)
