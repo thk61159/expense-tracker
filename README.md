@@ -15,10 +15,12 @@ password: 12345678
 7. 本地註冊登入登出
 8. google帳號第三方登入
 9. facebook帳號第三方登入
+10. 忘記密碼
 
 
 ## 使用介面
 ![alt 使用介面圖示](https://github.com/thk61159/expense-tracker/blob/main/public/pictures/overall.png?raw=true "記帳使用介面")
+![alt 使用介面圖示](https://github.com/thk61159/expense-tracker/blob/main/public/pictures/resetPassword.png?raw=true "記帳使用介面")
 
 ## 如何使用
 1. 開啟終端機(terminal)，輸入如下將專案複製到電腦中
@@ -55,17 +57,7 @@ npm run seed
 ##開發工具
 * Visual Studio Code 
 * Node.js: ^14.16.0
-* bcryptjs: ^2.4.3
-* connect-flash: ^0.1.1
-*	express: ^4.18.2
-*	express-handlebars: ^6.0.6
-*	express-session: ^1.17.1
-*	method-override: ^3.0.0
-*	mongoose": ^5.9.7
-*	passport": ^0.6.0
-*	passport-facebook: "^3.0.0
-*	passport-google-oauth20: ^2.0.0
-*	passport-local: ^1.0.0
+* 
 ##參考
 * [記帳列表樣板](https://assets-lighthouse.alphacamp.co/uploads/image/file/17368/ExportedContentImage_00.png)
 
