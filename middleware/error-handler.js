@@ -8,4 +8,7 @@ module.exports = {
 		res.redirect('back')
 		next(err)
 	},
+	pageNotExist: (req, res) => {
+		res.redirect('/')
+	}
 }
