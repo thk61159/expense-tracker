@@ -1,4 +1,4 @@
-# 我的餐廳清單
+# 廣志の私帳
 利用node.js打造記帳網頁，瀏覽收支列表，計算總消費額，新增修改刪除收支項目，掌握帳務，成為理財大師！
 歡迎查看雲端部署專案
 https://frozen-crag-42286.herokuapp.com/register
@@ -45,11 +45,11 @@ password: 12345678
 ```shell
 npm run seed
 ```
-3. 運行我的餐廳清單
+3. 運行廣志の私帳
 ```shell
  npm run start
 ```
-4. 拜訪我的餐廳清單網頁
+4. 拜訪廣志の私帳網頁
 ```shell
  http://localhost:3000/
 ```
