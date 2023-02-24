@@ -64,7 +64,7 @@ const userController = {
 	passwordReset: async (req, res, next) => {
 		try {
 			const { email } = req.body
-			console.log(email)
+			
 			if (!email) throw new Error('請輸入信箱')
 			const user = await User.findOne({ email })
 			if (!user) throw new Error('此信箱未註冊')
@@ -93,6 +93,7 @@ const userController = {
 					pass: process.env.GOOGLE_SMTP_PASSWORD,
 				},
 			})
+			console.log('正在發送email')
 			// send mail with defined transport object
 			let info = await transporter.sendMail({
 				from: process.env.GOOGLE_SMTP_ADDRESS,
@@ -100,7 +101,8 @@ const userController = {
 				subject: 'expense-tracker password reset ✔',
 				html: `<a href=${homeAddress}/resetPassword/${token}>Please reset password in 30 mins.</a>`,
 			})
-			res.redirect('/comfirmMail')
+			console.log(`${homeAddress}/resetPassword/${token}`)
+			res.redirect('/confirmMail')
 		} catch (err) {
 			return next(err)
 		}
@@ -125,15 +127,18 @@ const userController = {
 				return next(err)
 			}
 			const decoded = JSON.stringify(jwt.verify(token, process.env.JWT_SECRET))
-			console.log(decoded)
 			const payload = JSON.parse(decoded)
-			console.log(payload)
 			const user = await User.findById(payload.id)
+			const resetInterval = Number(new Date()) - Number(user.updatedAt)
+			const waitingTime = (24 * 60 * 60 * 1000 - resetInterval) / 3600000
+			if (waitingTime > 0)
+				throw new Error(
+					`重設密碼間隔過短，請${Math.floor(waitingTime)}小時後再嘗試`
+				)
 			const salt = await bcrypt.genSalt(10)
 			const hash = await bcrypt.hash(password, salt)
 			user.password = hash
 			user.updatedAt = new Date()
-
 			await user.save()
 			res.redirect('/login')
 		} catch (err) {

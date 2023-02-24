@@ -35,10 +35,12 @@ const expenseController = {
 			} = req.query
 			//&& -> if the left hand side is true, then evaluates as the right hand side
 			const categoryId = sortCategory !== 'null' && mongoose.Types.ObjectId(sortCategory)
-			function SORT(key, value) {
-				return this[key] = value
-			}
-			let sort = new SORT(sortTitle, sortMethod)
+			// function SORT(key, value) {
+			// 	return this[key] = value
+			// }
+			// let sort = new SORT(sortTitle, sortMethod)
+			let sort = {}
+			sort[sortTitle] = sortMethod
 			const userId = req.user._id
 			const categories = await Category.find().lean()
 			const data =
