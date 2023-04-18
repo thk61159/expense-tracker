@@ -6,6 +6,10 @@ const { authenticator } = require('../middleware/auth')
 const { generalErrorHandler, pageNotExist } = require('../middleware/error-handler')
 const { resetLimit } = require('../middleware/resetLimit')
 
+router.get('/test', (req,res)=> {
+  console.log(req.query)
+  res.render('test')
+})
 router.put('/:id/edit', authenticator, expenseController.putEditExpence)
 router.get('/:id/edit', authenticator, expenseController.getEditExpence)
 router.delete('/:id', authenticator, expenseController.deleteExpence)
